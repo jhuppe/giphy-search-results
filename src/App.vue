@@ -2,11 +2,10 @@
   <div id="app">
     <h1>Gif Searcher</h1>
     <input v-model="searchTerm" type="text">
-    <button class="button" @click=getGifs()>Search</button>
+    <button class="button" @click="getGifs()">Search</button>
     <div class="gif-container">
       <img v-for="gif in gifs" :src="gif" :key="gif.id">
-    </div> 
-  
+    </div>
   </div>
 </template>
 
@@ -17,29 +16,31 @@ export default {
       searchTerm: "",
       gifs: []
     };
-  }, 
+  },
   methods: {
     getGifs() {
       let apiKey = "R9h97hQRlnxC9yqa8nDHnewVl8kpx2CL";
       let searchEndPoint = "https://api.giphy.com/v1/gifs/search?";
-      let limit = 5;
+      let limit = 10;
       let url = `${searchEndPoint}&api_key=${apiKey}&q=${
         this.searchTerm
-        }&limit=${limit}`;
+      }&limit=${limit}`;
 
-        fetch(url)
-          .then(response => {
-            return response.json();
-          })
-          .then(json => {
-          this.buildGifs(json);
+      fetch(url)
+        .then(response => {
+          return response.json();
         })
-        .catch(err => console.log(err));
+        .then(json => {
+          this.buildGifs(json);
+        });
+      // .catch(err => console.log(err));
     },
     buildGifs(json) {
-      this.gifs = json.data.map(gif => gif.id).map(gifId => {
-        return `https://media.giphy.com/media/${gifId}/giphy.gif`;
-      });
+      this.gifs = json.data
+        .map(gif => gif.id)
+        .map(gifId => {
+          return `https://media.giphy.com/media/${gifId}/giphy.gif`;
+        });
     }
   }
 };
@@ -47,7 +48,7 @@ export default {
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -59,7 +60,7 @@ input {
   margin-bottom: 20px;
 }
 .button {
-  background-color: rgb(0,172,0);
+  background-color: rgb(0, 172, 0);
   color: white;
   padding: 5px 20px;
   border: none;
@@ -67,7 +68,7 @@ input {
   margin: 0 auto;
 }
 .button:hover {
-  background-color: rgb(0,148,0);
+  background-color: rgb(0, 148, 0);
 }
 .gif-container {
   margin-top: 30px;
@@ -75,5 +76,17 @@ input {
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
+}
+
+img {
+  position: relative;
+  float: left;
+  width: 300px;
+  height: 300px;
+  padding: 10px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 </style>
